@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle.jsx';
+import { useAuth } from '../context/AuthContext.jsx';
 
 const NAV_ITEMS = [
   { label: 'Product', hasMenu: true },
@@ -41,6 +43,17 @@ function BrandMark() {
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { session, profile, signOut } = useAuth();
+  const navigate = useNavigate();
+  const isAuthed = !!session;
+  const displayName =
+    profile?.full_name?.trim() || session?.user?.email || 'Account';
+
+  const handleSignOut = async () => {
+    await signOut();
+    setMobileOpen(false);
+    navigate('/', { replace: true });
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -75,13 +88,34 @@ export default function Navbar() {
           <a href="#docs" className="nav-link">
             Docs
           </a>
-          <a href="#login" className="nav-link">
-            Log in
-          </a>
-          <ThemeToggle />
-          <a href="#get-started" className="btn-accent !py-2 !px-5">
-            Get started
-          </a>
+          {isAuthed ? (
+            <>
+              <Link to="/dashboard" className="nav-link">
+                Dashboard
+              </Link>
+              <ThemeToggle />
+              <span className="text-sm text-stone-600 dark:text-stone-300 max-w-[160px] truncate" title={displayName}>
+                {displayName}
+              </span>
+              <button
+                type="button"
+                onClick={handleSignOut}
+                className="btn-accent !py-2 !px-5"
+              >
+                Sign out
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/auth" className="nav-link">
+                Log in
+              </Link>
+              <ThemeToggle />
+              <Link to="/auth?mode=signup" className="btn-accent !py-2 !px-5">
+                Get started
+              </Link>
+            </>
+          )}
         </div>
 
         <div className="md:hidden flex items-center gap-3">
@@ -118,10 +152,36 @@ export default function Navbar() {
             ))}
             <div className="h-px bg-stone-200 dark:bg-stone-800 my-2" />
             <a href="#docs" className="nav-link py-1">Docs</a>
-            <a href="#login" className="nav-link py-1">Log in</a>
-            <a href="#get-started" className="btn-accent w-full justify-center">
-              Get started
-            </a>
+            {isAuthed ? (
+              <>
+                <Link to="/dashboard" className="nav-link py-1" onClick={() => setMobileOpen(false)}>
+                  Dashboard
+                </Link>
+                <span className="text-xs text-stone-500 dark:text-stone-400 py-1 truncate">
+                  {displayName}
+                </span>
+                <button
+                  type="button"
+                  onClick={handleSignOut}
+                  className="btn-accent w-full justify-center"
+                >
+                  Sign out
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/auth" className="nav-link py-1" onClick={() => setMobileOpen(false)}>
+                  Log in
+                </Link>
+                <Link
+                  to="/auth?mode=signup"
+                  className="btn-accent w-full justify-center"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Get started
+                </Link>
+              </>
+            )}
           </div>
         </div>
       )}

@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 export default function Hero() {
   return (
     <section className="relative overflow-hidden bg-hero-light dark:bg-hero-dark pt-28 pb-24 sm:pt-36 sm:pb-32">
@@ -33,18 +35,18 @@ export default function Hero() {
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <a href="#get-started" className="btn-primary">
+            <Link to="/auth?mode=signup" className="btn-primary">
               Get started
               <svg viewBox="0 0 20 20" className="h-4 w-4" fill="currentColor">
                 <path d="M11.78 4.22a.75.75 0 010 1.06L7.56 9.5h8.19a.75.75 0 010 1.5H7.56l4.22 4.22a.75.75 0 11-1.06 1.06l-5.5-5.5a.75.75 0 010-1.06l5.5-5.5a.75.75 0 011.06 0z" transform="rotate(180 10 10)" />
               </svg>
-            </a>
-            <a href="#talk" className="btn-ghost">
-              Talk to a coach
+            </Link>
+            <Link to="/auth" className="btn-ghost">
+              Sign in
               <svg viewBox="0 0 20 20" className="h-4 w-4" fill="currentColor">
                 <path d="M11.78 4.22a.75.75 0 010 1.06L7.56 9.5h8.19a.75.75 0 010 1.5H7.56l4.22 4.22a.75.75 0 11-1.06 1.06l-5.5-5.5a.75.75 0 010-1.06l5.5-5.5a.75.75 0 011.06 0z" transform="rotate(180 10 10)" />
               </svg>
-            </a>
+            </Link>
           </div>
         </div>
 
